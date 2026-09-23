@@ -1,3 +1,4 @@
+package banking;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -11,6 +12,14 @@ public class Account {
     // constructor
     public Account(String id, String name) {
         balance = BigDecimal.ZERO;
+        this.id = id;
+        ownerName = name;
+        createdAt = Instant.now();
+    }
+
+    // alternative constructor with an initial balance 
+    public Account(String id, String name, BigDecimal initialBalance) {
+        balance = initialBalance;
         this.id = id;
         ownerName = name;
         createdAt = Instant.now();

@@ -1,9 +1,11 @@
-import MyExceptions.AccountNotFoundException;
+package banking;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import banking.Myexceptions.AccountNotFoundException;
 
 
 public class jdbcAccountDAO implements AccountDAO {
@@ -22,14 +24,11 @@ public class jdbcAccountDAO implements AccountDAO {
             int changedRows = ps.executeUpdate();
 
             if (changedRows == 0) {
-                conn.rollback();
                 throw new AccountNotFoundException("Account with ID: " + account.getID() + " was already created.");
             }
         }
 
         catch (SQLException e) {
-            System.err.println("Error: Account with ID: " + account.getID() + " was already created.");
-            conn.rollback();
             throw e;
         }
     }
@@ -44,12 +43,9 @@ public class jdbcAccountDAO implements AccountDAO {
                 Account newAccount = new Account(rs.getString("USER_ID"), rs.getString("USER_NAME"));
                 return newAccount;
             } else {
-                conn.rollback();
                 throw new AccountNotFoundException("Account with ID: " + account.getID() + " not found.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            conn.rollback();
             throw e;
         }
     }
@@ -62,12 +58,10 @@ public class jdbcAccountDAO implements AccountDAO {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) {
-                conn.rollback();
+
                 throw new AccountNotFoundException("Account with ID: " + account.getID() + " not found.");
             }
         } catch (SQLException e) {
-            conn.rollback();
-            e.printStackTrace();
             throw e;
         }
     }

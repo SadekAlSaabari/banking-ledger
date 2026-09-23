@@ -1,3 +1,5 @@
+package banking;
+
 public enum TransactionType {
     DEPOSIT("deposit"),
     WITHDRAWAL("withdrawal"),
@@ -10,7 +12,7 @@ public enum TransactionType {
         this.type = type;
     }
 
-    // returns lowercsase string representation of transaction type
+    // returns lowercase string representation of transaction type
     public String getType() {
         return type;
     }

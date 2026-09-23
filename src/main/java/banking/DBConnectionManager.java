@@ -1,3 +1,4 @@
+package banking;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,7 +8,7 @@ public class DBConnectionManager {
         
     }
 
-    public Connection getConnection() throws SQLException {
+    public Connection establishConnection() throws SQLException {
         try {
             Connection con = DriverManager.getConnection("jdbc:sqlite:database.db");
             con.setAutoCommit(false);
