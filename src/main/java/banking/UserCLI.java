@@ -142,8 +142,7 @@ public class UserCLI {
                 case "5":
                     signedIn = false;
                     System.out.println("You have been signed out. \n");
-                    start(); // Return to the main menu
-                    break;
+                    return; // Return to the main menu
                 case "6":
                     System.out.println("Thank you for using the Bank. Goodbye!");
                     System.exit(0);
