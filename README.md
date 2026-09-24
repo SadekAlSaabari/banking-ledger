@@ -25,7 +25,7 @@ The application allows users to:
 
 ## Requirements
 
-- Java 25 or later
+- Java 17 or later
 - Maven
 
 The project uses the SQLite JDBC driver, which Maven downloads automatically.
