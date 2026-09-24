@@ -10,7 +10,7 @@ import banking.BankingExceptions.AccountNotFoundException;
 
 public class jdbcAccountDAO implements AccountDAO {
     private final String createQuery = "INSERT INTO accounts (user_id, user_name, balance, created_at) VALUES (?, ?, ?, ?)";
-    private final String retrieveQuery = "SELECT * FROM accounts WHERE user_id = ?";
+    private final String retrieveQuery = "SELECT * FROM accounts WHERE user_id = ? AND user_name = ?";
     private final String viewBalanceQuery = "SELECT balance FROM accounts WHERE user_id = ?";
     private final String updateQuery = "UPDATE accounts SET balance = ? WHERE user_id = ?";
 
@@ -38,6 +38,7 @@ public class jdbcAccountDAO implements AccountDAO {
     public Account retrieveAccount(Account account, Connection conn) throws AccountNotFoundException, SQLException {
         try (PreparedStatement ps = conn.prepareStatement(retrieveQuery)) {
             ps.setString(1, account.getID());
+            ps.setString(2, account.getOwnerName());
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
