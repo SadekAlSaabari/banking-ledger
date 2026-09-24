@@ -13,12 +13,16 @@ public class Transaction {
 
     // constructor
     public Transaction(String id, String sourceAccountId, String targetAccountId, TransactionType type, BigDecimal amount) {
+        this(id, sourceAccountId, targetAccountId, type, amount, Instant.now());
+    }
+
+    public Transaction(String id, String sourceAccountId, String targetAccountId, TransactionType type, BigDecimal amount, Instant carriedOutAt) {
         this.id = id;
         this.sourceAccountId = sourceAccountId;
         this.targetAccountId = targetAccountId;
         this.type = type;
         this.amount = amount;
-        carriedOutAt = Instant.now();
+        this.carriedOutAt = carriedOutAt;
     }
 
     public Transaction(String id, String accountId, TransactionType type, BigDecimal amount) {

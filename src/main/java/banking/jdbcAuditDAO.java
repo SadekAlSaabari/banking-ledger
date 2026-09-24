@@ -5,12 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import banking.Myexceptions.NoTransactionsFoundException;
 
 public class jdbcAuditDAO implements AuditDAO {
-    private final String loggingQuery = "INSERT INTO transactions_audit (source_id, target_id, transaction_type, amount, carried_out_at) VALUES (?, ?, ?, ?, ?)";
-    private final String retrievalQuery = "SELECT * FROM transactions_audit WHERE source_id = ? OR target_id = ? ORDER BY carried_out_at DESC";
+    private final String loggingQuery = "INSERT INTO transaction_audit (source_id, target_id, transaction_type, amount, carried_out_at) VALUES (?, ?, ?, ?, ?)";
+    private final String retrievalQuery = "SELECT * FROM transaction_audit WHERE source_id = ? OR target_id = ? ORDER BY carried_out_at DESC";
 
     
     public jdbcAuditDAO() {
@@ -29,26 +31,38 @@ public class jdbcAuditDAO implements AuditDAO {
             }
             ps.setString(3, type.getType());
             ps.setBigDecimal(4, amount);
-            ps.setTimestamp(5, java.sql.Timestamp.from(Instant.now()));
+            ps.setString(5, Instant.now().toString());
 
             ps.executeUpdate();
-
         } catch (SQLException e) {
             throw e;
         }
     }
 
     @Override
-    public ResultSet retrieveTransactions(Account account, Connection conn) throws SQLException, NoTransactionsFoundException {
+    public List<Transaction> retrieveTransactions(Account account, Connection conn) throws SQLException, NoTransactionsFoundException {
+        List<Transaction> transactions = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(retrievalQuery)) {
             ps.setString(1, account.getID());
             ps.setString(2, account.getID());
-            ResultSet results = ps.executeQuery();
-            if (!results.next()) {
-                throw new NoTransactionsFoundException("No transactions found for account with ID: " + account.getID());
-            } else {
-                return results;
+            try (ResultSet results = ps.executeQuery()) {
+                while (results.next()) {
+                    transactions.add(new Transaction(
+                        results.getString("transaction_id"),
+                        results.getString("source_id"),
+                        results.getString("target_id"),
+                        TransactionType.valueOf(
+                            results.getString("transaction_type").toUpperCase()
+                        ),
+                        results.getBigDecimal("amount"),
+                        Instant.parse(results.getString("carried_out_at"))
+                    ));
+                }
             }
+            if (transactions.isEmpty()) {
+                throw new NoTransactionsFoundException("No transactions found for account with ID: " + account.getID());
+            }
+            return transactions;
         } catch (SQLException e) {
             throw e;
         }

@@ -13,4 +13,9 @@
             <version>3.53.4.0</version>
         </dependency>
     </dependencies>
+
+    <properties>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
+</properties>
 </project>

@@ -10,5 +10,7 @@ public interface AccountDAO {
 
     public Account retrieveAccount(Account account, Connection con) throws AccountNotFoundException, SQLException;
 
+    public String viewBalance(Account account, Connection con) throws AccountNotFoundException, SQLException;
+
     public void updateBalance(Account account, BigDecimal newBalance, Connection con) throws AccountNotFoundException, SQLException;
 }

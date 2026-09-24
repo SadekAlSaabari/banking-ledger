@@ -15,7 +15,6 @@ public class DBConnectionManager {
             return con;
         }
         catch (SQLException e) {
-            e.printStackTrace();
             throw e;
         }
     }

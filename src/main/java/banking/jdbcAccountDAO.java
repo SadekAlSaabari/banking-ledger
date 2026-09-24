@@ -11,6 +11,7 @@ import banking.Myexceptions.AccountNotFoundException;
 public class jdbcAccountDAO implements AccountDAO {
     private final String createQuery = "INSERT INTO accounts (user_id, user_name, balance, created_at) VALUES (?, ?, ?, ?)";
     private final String retrieveQuery = "SELECT * FROM accounts WHERE user_id = ?";
+    private final String viewBalanceQuery = "SELECT balance FROM accounts WHERE user_id = ?";
     private final String updateQuery = "UPDATE accounts SET balance = ? WHERE user_id = ?";
 
     @Override
@@ -40,8 +41,28 @@ public class jdbcAccountDAO implements AccountDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Account newAccount = new Account(rs.getString("USER_ID"), rs.getString("USER_NAME"));
+                Account newAccount = new Account(
+                    rs.getString("USER_ID"),
+                    rs.getString("USER_NAME"),
+                    rs.getBigDecimal("BALANCE")
+                );
                 return newAccount;
+            } else {
+                throw new AccountNotFoundException("Account with ID: " + account.getID() + " not found.");
+            }
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public String viewBalance(Account account, Connection conn) throws AccountNotFoundException, SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(viewBalanceQuery)) {
+            ps.setString(1, account.getID());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBigDecimal("balance").toString();
             } else {
                 throw new AccountNotFoundException("Account with ID: " + account.getID() + " not found.");
             }
@@ -58,7 +79,6 @@ public class jdbcAccountDAO implements AccountDAO {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) {
-
                 throw new AccountNotFoundException("Account with ID: " + account.getID() + " not found.");
             }
         } catch (SQLException e) {

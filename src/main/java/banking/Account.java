@@ -17,6 +17,14 @@ public class Account {
         createdAt = Instant.now();
     }
 
+    // constructor only needing id
+    public Account(String id) {
+        balance = BigDecimal.ZERO;
+        this.id = id;
+        ownerName = null;
+        createdAt = Instant.now();
+    }
+
     // alternative constructor with an initial balance 
     public Account(String id, String name, BigDecimal initialBalance) {
         balance = initialBalance;
