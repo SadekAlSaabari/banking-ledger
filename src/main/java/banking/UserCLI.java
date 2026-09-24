@@ -43,6 +43,7 @@ public class UserCLI {
                     break;
                 case "3":
                     System.out.println("Thank you for using the Bank. Goodbye!");
+                    scanner.close();
                     break OUTER;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -62,14 +63,12 @@ public class UserCLI {
 
             if (depositChoice.equals("yes")) {
                 System.out.println("Enter the initial deposit amount:");
-                String initialDepositInput = scanner.nextLine();
+                BigDecimal initialBalance = inputAmountValidation(scanner);
+                
                 try {
-                    BigDecimal initialBalance = new BigDecimal(initialDepositInput);
                     String newId = service.createAccount(newName, initialBalance);
                     System.out.println("Account created successfully! Your account ID is: " + newId + ". Don't forget to write it down somewhere safe!" + "\n");
                     break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid amount. Please enter a valid number.");
                 } catch (AccountNotFoundException | SQLException e) {
                     System.out.println("Error creating account: " + e.getMessage());
                 }
@@ -137,7 +136,7 @@ public class UserCLI {
                     break;
                 case "4":
                     // Handle viewing transaction history
-                    viewTransactionHistory(scanner, account);
+                    viewTransactionHistory(account);
                     break;
                 case "5":
                     signedIn = false;
@@ -145,6 +144,7 @@ public class UserCLI {
                     return; // Return to the main menu
                 case "6":
                     System.out.println("Thank you for using the Bank. Goodbye!");
+                    scanner.close();
                     System.exit(0);
                     break;
                 default:
@@ -156,9 +156,8 @@ public class UserCLI {
     // Method to make a deposit
     public void makeADeposit(Scanner scanner, Account account) {
         System.out.println("Enter the amount to deposit:");
-        String depositInput = scanner.nextLine();
+        BigDecimal depositAmount = inputAmountValidation(scanner);
         try {
-            BigDecimal depositAmount = new BigDecimal(depositInput);
             service.deposit(account.getID(), account.getOwnerName(), depositAmount);
             System.out.println("Deposit successful! Your new balance is: £" + service.viewBalance(account) + "\n");
         } catch (NumberFormatException e) {
@@ -171,9 +170,8 @@ public class UserCLI {
     // Method to make a withdrawal
     public void makeAWithdrawal(Scanner scanner, Account account) {
         System.out.println("Enter the amount to withdraw:");
-        String withdrawalInput = scanner.nextLine();
+        BigDecimal withdrawalAmount = inputAmountValidation(scanner);
         try {
-            BigDecimal withdrawalAmount = new BigDecimal(withdrawalInput);
             service.withdraw(account.getID(), account.getOwnerName(), withdrawalAmount);
             System.out.println("Withdrawal successful! Your new balance is: £" + service.viewBalance(account) + "\n");
         } catch (InsufficientFundsException e) {
@@ -190,11 +188,10 @@ public class UserCLI {
         System.out.println("Enter the recipient's account ID:");
         String recipientId = scanner.nextLine().toUpperCase();
         System.out.println("Enter the amount to transfer:");
-        String transferInput = scanner.nextLine();
+        BigDecimal transferAmount = inputAmountValidation(scanner);
         try {
-            BigDecimal transferAmount = new BigDecimal(transferInput);
             service.transfer(account.getID(), account.getOwnerName(), recipientId, transferAmount);
-            System.out.println("Transfer successful! Your new balance is: £" + account.getBalance() + "\n");
+            System.out.println("Transfer successful! Your new balance is: £" + service.viewBalance(account) + "\n");
         } catch (InsufficientFundsException e) {
             System.out.println("Insufficient funds. Your current balance is: £" + account.getBalance() + "\n");
         } catch (NumberFormatException e) {
@@ -205,7 +202,7 @@ public class UserCLI {
     }
 
     // Method to view transaction history
-    public void viewTransactionHistory(Scanner scanner, Account account) {
+    public void viewTransactionHistory(Account account) {
         try {
             System.out.println(service.retrieveTransactionHistory(account.getID(), account.getOwnerName()));
         } catch (AccountNotFoundException | SQLException e) {
@@ -214,4 +211,24 @@ public class UserCLI {
             System.out.println("No transactions found for your account.");
         }
     }
+
+    public BigDecimal inputAmountValidation(Scanner scanner) {
+        while (true) {
+            String input = scanner.nextLine().trim();
+            try {
+                BigDecimal amount = new BigDecimal(input);
+                if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+                    System.out.println("Invalid amount. Please enter a non-negative number.");
+                } else if (amount.scale() > 2) {
+                    System.out.println("Please enter an amount with no more than two decimal places.");
+                } else {
+                    return amount;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount. Please enter a valid number.");
+            }
+        }
+    }
 }
+
+    
