@@ -20,7 +20,7 @@ The application allows users to:
 - `AccountDAO` and `AuditDAO` — data-access interfaces
 - `jdbcAccountDAO` and `jdbcAuditDAO` — SQLite database implementations
 - `DBConnectionManager` — database connection management and initialisation
-- `Myexceptions` — custom application exceptions
+- `BankingExceptions` — custom application exceptions
 - `database.db` — local SQLite database file - will be created upon initialisation when executing program for the first time
 
 ## Requirements
