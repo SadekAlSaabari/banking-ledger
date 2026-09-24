@@ -29,3 +29,8 @@ target/
 
 # database files
 *.db
+
+#IDE-related files
+.idea/
+.vscode/
+.junie/
