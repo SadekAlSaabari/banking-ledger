@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import banking.Myexceptions.NoTransactionsFoundException;
+import banking.BankingExceptions.NoTransactionsFoundException;
 
 public class jdbcAuditDAO implements AuditDAO {
     private final String loggingQuery = "INSERT INTO transaction_audit (source_id, target_id, transaction_type, amount, carried_out_at) VALUES (?, ?, ?, ?, ?)";

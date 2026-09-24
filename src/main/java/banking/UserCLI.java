@@ -3,16 +3,23 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import banking.Myexceptions.AccountNotFoundException;
-import banking.Myexceptions.InsufficientFundsException;
-import banking.Myexceptions.NoTransactionsFoundException;
+import banking.BankingExceptions.AccountNotFoundException;
+import banking.BankingExceptions.InsufficientFundsException;
+import banking.BankingExceptions.NoTransactionsFoundException;
 
 public class UserCLI {
     private final BankingService service;
     private boolean signedIn = false;
+    private final DBConnectionManager dbManager;
 
     public UserCLI() {
         service = new BankingService();
+        dbManager = new DBConnectionManager();
+        try {
+                dbManager.initialiseDatabase();
+        } catch (SQLException e) {
+                System.out.println("Error initialising database: " + e.getMessage());
+        }
     }
     public static void main(String[] args) {
             UserCLI userCLI = new UserCLI();
@@ -212,6 +219,7 @@ public class UserCLI {
         }
     }
 
+    // Method to validate user input for amounts
     public BigDecimal inputAmountValidation(Scanner scanner) {
         while (true) {
             String input = scanner.nextLine().trim();

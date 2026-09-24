@@ -3,7 +3,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import banking.Myexceptions.AccountNotFoundException;
+import banking.BankingExceptions.AccountNotFoundException;
 
 public interface AccountDAO {
     public void createAccount(Account account, Connection con) throws AccountNotFoundException, SQLException;

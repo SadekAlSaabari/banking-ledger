@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
-import banking.Myexceptions.AccountNotFoundException;
-import banking.Myexceptions.InsufficientFundsException;
-import banking.Myexceptions.NoTransactionsFoundException;
+import banking.BankingExceptions.AccountNotFoundException;
+import banking.BankingExceptions.InsufficientFundsException;
+import banking.BankingExceptions.NoTransactionsFoundException;
 
 public class BankingService {    
     private final jdbcAccountDAO accountDAO;
