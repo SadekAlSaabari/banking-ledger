@@ -98,7 +98,7 @@ public class UserCLI {
         try {
             Account account = service.retrieveAccount(id, name);
             System.out.println("Sign-in successful! Welcome back, " + account.getOwnerName() + "!");
-            System.out.println("Your current balance is: $" + service.viewBalance(account) + "\n");
+            System.out.println("Your current balance is: £" + service.viewBalance(account) + "\n");
             signedIn = true;
             return account;
         } catch (AccountNotFoundException | SQLException e) {
@@ -160,7 +160,7 @@ public class UserCLI {
         try {
             BigDecimal depositAmount = new BigDecimal(depositInput);
             service.deposit(account.getID(), account.getOwnerName(), depositAmount);
-            System.out.println("Deposit successful! Your new balance is: $" + service.viewBalance(account) + "\n");
+            System.out.println("Deposit successful! Your new balance is: £" + service.viewBalance(account) + "\n");
         } catch (NumberFormatException e) {
             System.out.println("Invalid amount. Please enter a valid number.");
         } catch (AccountNotFoundException | SQLException e) {
@@ -175,9 +175,9 @@ public class UserCLI {
         try {
             BigDecimal withdrawalAmount = new BigDecimal(withdrawalInput);
             service.withdraw(account.getID(), account.getOwnerName(), withdrawalAmount);
-            System.out.println("Withdrawal successful! Your new balance is: $" + service.viewBalance(account) + "\n");
+            System.out.println("Withdrawal successful! Your new balance is: £" + service.viewBalance(account) + "\n");
         } catch (InsufficientFundsException e) {
-            System.out.println("Insufficient funds. Your current balance is: $" + account.getBalance() + "\n");
+            System.out.println("Insufficient funds. Your current balance is: £" + account.getBalance() + "\n");
         } catch (NumberFormatException e) {
             System.out.println("Invalid amount. Please enter a valid number.");
         } catch (AccountNotFoundException | SQLException e) {
@@ -194,9 +194,9 @@ public class UserCLI {
         try {
             BigDecimal transferAmount = new BigDecimal(transferInput);
             service.transfer(account.getID(), account.getOwnerName(), recipientId, transferAmount);
-            System.out.println("Transfer successful! Your new balance is: $" + account.getBalance() + "\n");
+            System.out.println("Transfer successful! Your new balance is: £" + account.getBalance() + "\n");
         } catch (InsufficientFundsException e) {
-            System.out.println("Insufficient funds. Your current balance is: $" + account.getBalance() + "\n");
+            System.out.println("Insufficient funds. Your current balance is: £" + account.getBalance() + "\n");
         } catch (NumberFormatException e) {
             System.out.println("Invalid amount. Please enter a valid number.");
         } catch (AccountNotFoundException | SQLException e) {
