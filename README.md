@@ -19,13 +19,13 @@ The application allows users to:
 - `Account` and `Transaction` — domain models
 - `AccountDAO` and `AuditDAO` — data-access interfaces
 - `jdbcAccountDAO` and `jdbcAuditDAO` — SQLite database implementations
-- `DBConnectionManager` — database connection management
-- `Myexceptions` — custom application exceptions
-- `database.db` — local SQLite database file
+- `DBConnectionManager` — database connection management and initialisation
+- `BankingExceptions` — custom application exceptions
+- `database.db` — local SQLite database file - will be created upon initialisation when executing program for the first time
 
 ## Requirements
 
-- Java 25 or later
+- Java 17 or later
 - Maven
 
 The project uses the SQLite JDBC driver, which Maven downloads automatically.
@@ -62,6 +62,6 @@ The application stores account and transaction data in the local `database.db` S
 
 ## Notes
 
-The database already contains 2 accounts that can be used to try the application:
+Upon initialisation, the database will contain 2 accounts that can be used to try the application:
 1. james with an ID of A5I9N8, and a balance of £1100
 2. andrew with an ID of N0T2A9, and a balance of £0
